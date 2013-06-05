@@ -1,0 +1,7 @@
+country = AT
+locality = Vienna
+organization = Guenther Brunthaler EDV-Dienstleistungen
+cn = dummy.client.example.com
+tls_www_client
+encryption_key
+signing_key

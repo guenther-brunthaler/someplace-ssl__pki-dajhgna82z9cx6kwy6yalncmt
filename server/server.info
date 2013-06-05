@@ -1,0 +1,5 @@
+organization = Guenther Brunthaler EDV-Dienstleistungen
+cn = dummy.server.example.com
+tls_www_server
+encryption_key
+signing_key
