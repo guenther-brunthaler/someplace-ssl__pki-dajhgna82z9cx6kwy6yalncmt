@@ -1,8 +1,8 @@
 #! /bin/sh
 CAPRVKEY=../ca/ca-private-key.pem
 CAPUBCERT=../ca/ca-public-cert.pem
-PRVKEY=server-private-key.pem
-PUBCERT=server-public-cert.pem
+PRVKEY=server-${1}${1:+-}private-key.pem
+PUBCERT=server-${1}${1:+-}public-cert.pem
 certtool --generate-privkey > "$PRVKEY"
 chmod 600 "$PRVKEY"
 certtool --generate-certificate \
