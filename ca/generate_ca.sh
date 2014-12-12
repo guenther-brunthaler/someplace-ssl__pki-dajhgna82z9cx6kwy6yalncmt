@@ -25,7 +25,7 @@ else
 fi
 sn=`expr "$sn" + 1`
 sn=`printf '%0*u' "$digits" "$sn"`
-set -- -I../shared -DSERIAL_NUMBER=$sn
+set -- -E -I../shared -DSERIAL_NUMBER=$sn
 if test -n "$SUBTYPE"
 then
 	set -- "$@" -DSUBTYPE="$SUBTYPE"

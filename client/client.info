@@ -4,7 +4,7 @@ locality = MY_LOCALITY
 #ifdef SUBTYPE
 #define MY_CLIENT SUBTYPE
 #else
-#define MY_CLIENT dummy
+#error "You need to specify the client's name!"
 #endif
 cn = MY_CLIENT.client.MY_DOMAIN
 tls_www_client
