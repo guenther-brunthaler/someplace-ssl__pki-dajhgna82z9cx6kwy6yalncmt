@@ -1,5 +1,10 @@
 #include "common.info"
-cn = dummy.server.example.com
+#ifdef SUBTYPE
+#define MY_SERVER SUBTYPE
+#else
+#define MY_SERVER dummy
+#endif
+cn = MY_SERVER.server.MY_DOMAIN
 tls_www_server
 encryption_key
 signing_key

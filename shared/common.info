@@ -1,3 +1,7 @@
-organization = Guenther Brunthaler EDV-Dienstleistungen
+#define MY_COMPANY Guenther Brunthaler EDV-Dienstleistungen
+#define MY_COUNTRY AT
+#define MY_LOCALITY Vienna
+#define MY_DOMAIN example.com
+organization = MY_COMPANY
 expiration_days = 1095
 serial = SERIAL_NUMBER

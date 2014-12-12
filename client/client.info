@@ -1,7 +1,12 @@
 #include "common.info"
-country = AT
-locality = Vienna
-cn = dummy.client.example.com
+country = MY_COUNTRY
+locality = MY_LOCALITY
+#ifdef SUBTYPE
+#define MY_CLIENT SUBTYPE
+#else
+#define MY_CLIENT dummy
+#endif
+cn = MY_CLIENT.client.MY_DOMAIN
 tls_www_client
 encryption_key
 signing_key

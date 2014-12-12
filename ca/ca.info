@@ -1,5 +1,10 @@
 #include "common.info"
 unit = Identity Management Services
-cn = Guenther Brunthaler EDV-Dienstleistungen Root CA
+#ifdef SUBTYPE
+#define MY_SUBJECT SUBTYPE
+#else
+#define MY_SUBJECT Root
+#endif
+cn = MY_COMPANY MY_SUBJECT CA
 ca
 cert_signing_key

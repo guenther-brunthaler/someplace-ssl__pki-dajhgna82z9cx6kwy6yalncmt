@@ -6,8 +6,9 @@ set -e
 trap 'echo "Failure!" >& 2' 0
 
 kind=${0##*/}; kind=${kind%.sh}; kind=${kind#generate_}; test -n "$kind"
-PRVKEY_PREFIX=$kind-${1}${1:+-}private-key
-PUBCERT_PREFIX=$kind-${1}${1:+-}public-cert
+SUBTYPE=$1
+PRVKEY_PREFIX=$kind-${SUBTYPE}${SUBTYPE:+-}private-key
+PUBCERT_PREFIX=$kind-${SUBTYPE}${SUBTYPE:+-}public-cert
 
 infile=$kind.info
 test -f "$infile"
@@ -24,7 +25,14 @@ else
 fi
 sn=`expr "$sn" + 1`
 sn=`printf '%0*u' "$digits" "$sn"`
-cpp -P -I../shared -DSERIAL_NUMBER=$sn "$infile" > "$tpl"
+set -- -P -I../shared -DSERIAL_NUMBER=$sn
+if test -n "$SUBTYPE"
+then
+	set -- "$@" -DSUBTYPE="$SUBTYPE"
+else
+	set -- "$@" -USUBTYPE
+fi
+cpp "$@" "$infile" > "$tpl"
 
 pk=$PRVKEY_PREFIX-$sn$SUFFIX
 certtool --generate-privkey > "$pk"

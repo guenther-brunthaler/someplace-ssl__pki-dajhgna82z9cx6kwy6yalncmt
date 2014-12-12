@@ -30,8 +30,17 @@ In order to avoid duplication, the C preprocessor is run over the *.info files
 and #include-directives as well as C macros can be used to include shared text
 snippets from any file within the "shared" subdirectory. There is also a file
 examples.info there which contains examples of the settings available for the
-*.info files. A single macro SERIAL_NUMBER is predefined, which expands
-to the current serial number of the certificate to be created.
+*.info files.
+
+The following macros will be predefined when running the preprocessor:
+
+* SERIAL_NUMBER expands to the current serial number of the certificate to be
+created.
+
+* SUBTYPE expands either to nothing or to the argument passed as the first
+argument of the script. This can be used to specify a specific client's name
+for the certificate without the need to create a different *.info file for
+every client.
 
 A file last_serial.txt is maintained by the scripts within each directory and
 contains the serial number of the last certificate created there. If there is
