@@ -1,12 +1,10 @@
 #include "common.info"
 country = MY_COUNTRY
 locality = MY_LOCALITY
-#ifdef SUBTYPE
-#define MY_CLIENT SUBTYPE
-#else
+#ifndef SUBTYPE
 #error "You need to specify the client's name!"
 #endif
-cn = MY_CLIENT.client.MY_DOMAIN
+cn = SUBTYPE.client.MY_DOMAIN
 tls_www_client
 encryption_key
 signing_key

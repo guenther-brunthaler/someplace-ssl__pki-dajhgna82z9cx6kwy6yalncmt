@@ -1,10 +1,8 @@
 #include "common.info"
-#ifdef SUBTYPE
-#define MY_SERVER SUBTYPE
-#else
-#define MY_SERVER dummy
+#ifndef SUBTYPE
+#error "You need to specify the server's name!"
 #endif
-cn = MY_SERVER.server.MY_DOMAIN
+cn = SUBTYPE.server.MY_DOMAIN
 tls_www_server
 encryption_key
 signing_key
