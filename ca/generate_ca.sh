@@ -25,14 +25,14 @@ else
 fi
 sn=`expr "$sn" + 1`
 sn=`printf '%0*u' "$digits" "$sn"`
-set -- -P -I../shared -DSERIAL_NUMBER=$sn
+set -- -I../shared -DSERIAL_NUMBER=$sn
 if test -n "$SUBTYPE"
 then
 	set -- "$@" -DSUBTYPE="$SUBTYPE"
 else
 	set -- "$@" -USUBTYPE
 fi
-cpp "$@" "$infile" > "$tpl"
+cpp "$@" "$infile" | grep -v "^#line" > "$tpl"
 
 pk=$PRVKEY_PREFIX-$sn$SUFFIX
 certtool --generate-privkey > "$pk"
