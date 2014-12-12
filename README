@@ -1,7 +1,7 @@
 This directory contains scripts for setting up and operating a Public Key
 Infrastructure (PKI) based on the OpenSSL utility.
 
-(c) 2013 by Guenther Brunthaler.
+(c) 2013 - 2014 by Guenther Brunthaler.
 These scripts are free software.
 Distribution is permitted under the terms of the GPLv3.
 
@@ -22,6 +22,11 @@ name or country etc. required by the script.
 
 The *.info files contain already example data which can already be used to
 create all required certificates.
+
+In order to avoid duplication, the C preprocessor is run over the *.info files
+and #include-directives can be used to include shared text snippets from any
+file within the "shared" subdirectory. There is also a file examples.info
+there which contains examples of the settings available for the *.info files.
 
 However, they should be edited to ensure the parameters match your actual
 server/client/country etc. settings.

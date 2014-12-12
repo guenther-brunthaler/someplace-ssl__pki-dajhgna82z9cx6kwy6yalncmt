@@ -1,3 +1,5 @@
-cn = Guenther Brunthaler EDV-Dienstleistungen
+#include "common.info"
+unit = Identity Management Services
+cn = Guenther Brunthaler EDV-Dienstleistungen Root CA
 ca
 cert_signing_key
