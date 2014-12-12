@@ -59,5 +59,6 @@ rm -- "$tpl"
 
 ln -sf "$pk" "$PRVKEY_PREFIX$SUFFIX"
 ln -sf "$pc" "$PUBCERT_PREFIX$SUFFIX"
+ln -sf "$pc"_info.txt "$PUBCERT_PREFIX$SUFFIX"_info.txt
 
 trap - 0
