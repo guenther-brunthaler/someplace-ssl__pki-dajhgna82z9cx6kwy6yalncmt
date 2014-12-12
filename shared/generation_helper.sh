@@ -1,15 +1,20 @@
 #! /bin/sh
+SUFFIX=.pem
+sf=last_serial.txt
+
+set -e
+trap 'echo "Failure!" >& 2' 0
+
 kind=$1
+test -n "$kind"
 PRVKEY_PREFIX=$kind-${2}${2:+-}private-key
 PUBCERT_PREFIX=$kind-${2}${2:+-}public-cert
 shift 2
-SUFFIX=.pem
-infile=$kind.info
-tpl=$infile.tmp
-sf=last_serial.txt
-ns=next_serial.tmp
 
+infile=$kind.info
 test -f "$infile"
+tpl=$infile.tmp
+
 if test -e "$sf"
 then
 	read sn < "$sf"
@@ -22,10 +27,7 @@ fi
 sn=`expr "$sn" + 1`
 sn=`printf '%0*u' "$digits" "$sn"`
 cpp -P -I../shared -DSERIAL_NUMBER=$sn "$infile" > "$tpl"
-echo $sn > "$ns"
 
-read sn < next_serial.tmp
-test -n "$sn"
 pk=$PRVKEY_PREFIX-$sn$SUFFIX
 certtool --generate-privkey > "$pk"
 chmod 600 "$pk"
@@ -36,8 +38,10 @@ certtool "$@" \
 	--outfile "$pc" \
 2>& 1 | tee "$pc"_info.txt
 
-test -f "$ns"
-cat "$ns" > "$sf"
-rm -- "$tpl" "$ns"
+echo "$sn" > "$sf"
+rm -- "$tpl"
+
+ln -sf "$pk" "$PRVKEY_PREFIX$SUFFIX"
+ln -sf "$pc" "$PUBCERT_PREFIX$SUFFIX"
 
 trap - 0
