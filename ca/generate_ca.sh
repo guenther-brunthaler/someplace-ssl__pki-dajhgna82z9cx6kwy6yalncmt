@@ -1,14 +1,27 @@
 #! /bin/sh
+# v2022.62
 SUFFIX=.pem
 sf=last_serial.txt
 
 set -e
 trap 'echo "Failure!" >& 2' 0
 
-kind=${0##*/}; kind=${kind%.sh}; kind=${kind#generate_}; test -n "$kind"
+command -v certtool > /dev/null || {
+	cat <<- '----' >& 2; false || exit
+		Please install 'certtool'!
+		One some platforms, package "gnutls-bin" provides this tool.
+----
+}
+
+kind=${0##*/}; kind=${kind%.sh}; kind=${kind#generate_}; test "$kind"
 SUBTYPE=$1
-PRVKEY_PREFIX=$kind-${SUBTYPE}${SUBTYPE:+-}private-key
-PUBCERT_PREFIX=$kind-${SUBTYPE}${SUBTYPE:+-}public-cert
+CLNSUBTYPE=`
+	printf '%s\n' "$SUBTYPE" | sed '
+		s/[^[:alnum:]]\{1,\}/_/g; s/^_//; s/_$//
+	'
+`
+PRVKEY_PREFIX=$kind-${CLNSUBTYPE}${CLNSUBTYPE:+-}private-key
+PUBCERT_PREFIX=$kind-${CLNSUBTYPE}${CLNSUBTYPE:+-}public-cert
 
 infile=$kind.info
 test -f "$infile"
@@ -26,20 +39,26 @@ fi
 sn=`expr "$sn" + 1`
 sn=`printf '%0*u' "$digits" "$sn"`
 set -- -E -I../shared -DSERIAL_NUMBER=$sn
-if test -n "$SUBTYPE"
+if test "$SUBTYPE"
 then
-	set -- "$@" -DSUBTYPE="$SUBTYPE"
+	set -- ${1+"$@"} -DSUBTYPE="$SUBTYPE"
 else
-	set -- "$@" -USUBTYPE
+	set -- ${1+"$@"} -USUBTYPE
 fi
 cpp "$@" "$infile" | grep -v "^#line" > "$tpl"
 
 pk=$PRVKEY_PREFIX-$sn$SUFFIX
-certtool --generate-privkey > "$pk"
+certtool \
+	--generate-privkey \
+	--bits=4096 \
+	--key-type=rsa \
+	> "$pk"
+# (The --seed option is insecure and has therefore been omitted for now.)
 chmod 600 "$pk"
 pc=$PUBCERT_PREFIX-$sn$SUFFIX
 case $kind in
 	ca)
+		test -z "$SUBTYPE" # CA creation does not use an argument!
 		set -- --generate-self-signed
 		;;
 	*)
